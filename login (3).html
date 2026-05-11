@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student Login Portal</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+    }
+
+    .login-box {
+      background: white;
+      padding: 30px 25px;
+      width: 320px;
+      border-radius: 16px;
+      box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.4);
+      text-align: center;
+    }
+
+    .login-box h1 {
+      font-size: 20px;
+      color: #0f3460;
+      margin-bottom: 5px;
+    }
+
+    .login-box h2 {
+      font-size: 15px;
+      color: #888;
+      font-weight: normal;
+      margin-bottom: 20px;
+    }
+
+
+    input {
+      width: 90%;
+      padding: 11px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+      transition: border 0.2s;
+    }
+
+    input:focus {
+      border-color: #0f3460;
+    }
+
+    button {
+      padding: 12px;
+      width: 97%;
+      background: linear-gradient(to right, #e94560, #0f3460);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: bold;
+      margin-top: 10px;
+      transition: opacity 0.2s;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    button:disabled {
+      background: #aaa;
+      cursor: not-allowed;
+    }
+
+    #message {
+      margin-top: 14px;
+      font-weight: bold;
+      font-size: 14px;
+      min-height: 20px;
+    }
+
+    #attempts-info {
+      font-size: 12px;
+      color: #888;
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-box">
+    <div class="icon"></div>
+    <h1>Student Login Portal</h1>
+    <h2>West Visayas State University</h2>
+
+    <input type="text" id="username" placeholder="Enter Username">
+    <input type="password" id="password" placeholder="Enter Password">
+    <button id="loginBtn" onclick="login()">Login</button>
+
+    <p id="message"></p>
+    <p id="attempts-info"></p>
+  </div>
+
+  <script>
+    // ──────────────────────────────────────────────
+    // TASK 1 & TASK 2: Users list
+    // TASK 1 → Replace "Juan" and "2003" with YOUR first name and birth year
+    // ──────────────────────────────────────────────
+    var users = [
+      { username: "Jenette", password: "2004" },   // TASK 1: YOUR credentials
+      { username: "admin",    password: "1234" },   // TASK 2: user 1
+      { username: "student1", password: "1111" },   // TASK 2: user 2
+      { username: "student2", password: "2222" }    // TASK 2: user 3
+    ];
+
+    // TASK 3: Attempt counter
+    var attempts = 0;
+    var maxAttempts = 3;
+    var locked = false;
+
+    function login() {
+      if (locked) return;
+
+      var user = document.getElementById("username").value.trim();
+      var pass = document.getElementById("password").value.trim();
+      var msgEl = document.getElementById("message");
+      var attEl = document.getElementById("attempts-info");
+
+      // Check credentials against all users
+      var matched = users.find(function(u) {
+        return u.username === user && u.password === pass;
+      });
+
+      if (matched) {
+        // TASK 5: Welcome message with username
+        var firstName = matched.username.split(" ")[0];
+        msgEl.innerHTML = "Welcome, " + firstName + "!";
+        msgEl.style.color = "green";
+        attEl.innerHTML = "";
+        document.getElementById("loginBtn").disabled = true;
+        attempts = 0;
+      } else {
+        attempts++;
+        var remaining = maxAttempts - attempts;
+
+        // TASK 3: Lock after 3 failed attempts
+        if (attempts >= maxAttempts) {
+          locked = true;
+          msgEl.innerHTML = "Account Locked!";
+          msgEl.style.color = "#c0392b";
+          attEl.innerHTML = "Too many failed attempts. Please contact your administrator.";
+          document.getElementById("loginBtn").disabled = true;
+          document.getElementById("username").disabled = true;
+          document.getElementById("password").disabled = true;
+        } else {
+          msgEl.innerHTML = "Invalid Username or Password!";
+          msgEl.style.color = "red";
+          attEl.innerHTML = "Attempts remaining: " + remaining;
+        }
+      }
+    }
+
+    // Allow pressing Enter to submit
+    document.addEventListener("keydown", function(e) {
+      if (e.key === "Enter") login();
+    });
+  </script>
+
+</body>
+</html>
